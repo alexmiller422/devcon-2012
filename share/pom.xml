@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!--
+		Licensed to the Apache Software Foundation (ASF) under one or more
+		contributor license agreements. See the NOTICE file distributed with
+		this work for additional information regarding copyright ownership.
+		The ASF licenses this file to You under the Apache License, Version
+		2.0 (the "License"); you may not use this file except in compliance
+		with the License. You may obtain a copy of the License at
+		http://www.apache.org/licenses/LICENSE-2.0 Unless required by
+		applicable law or agreed to in writing, software distributed under the
+		License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+		CONDITIONS OF ANY KIND, either express or implied. See the License for
+		the specific language governing permissions and limitations under the
+		License.
+	-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.alfresco.devcon2012.actions_and_behaviours</groupId>
+	<artifactId>share</artifactId>
+	<version>1.0-SNAPSHOT</version>
+	<name>Alfresco extension</name>
+	<packaging>war</packaging>
+	<url></url>
+	<description>Alfresco extension</description>
+
+	<properties>
+        <!-- Alfresco version/edition selection -->
+        <alfresco.version>4.2.b</alfresco.version>
+        <alfresco.edition>community</alfresco.edition>
+
+        <!-- Webapp packaged name -->
+        <webapp.name>share</webapp.name>
+
+        <alfresco.data.location>./data</alfresco.data.location>
+        <alfresco.db.name>devcon_2012</alfresco.db.name>
+        <alfresco.db.username>alfresco</alfresco.db.username>
+        <alfresco.db.password>alfresco</alfresco.db.password>
+
+        <alfresco.db.url>jdbc:mysql://localhost/devcon_2012?useUnicode=yes</alfresco.db.url>
+		<alfresco.db.driver>com.mysql.jdbc.Driver</alfresco.db.driver>
+    </properties>
+
+	<repositories>
+		<repository>
+			<id>maven-central</id>
+			<url>http://repo.maven.apache.org/maven2/</url>
+		</repository>
+		<repository>
+			<id>alfresco-public</id>
+			<url>https://maven.alfresco.com/nexus/content/groups/public</url>
+		</repository>
+		<repository>
+            <id>alfresco-public-snapshots</id>
+            <url>https://maven.alfresco.com/nexus/content/groups/public-snapshots</url>
+           <snapshots>
+                <enabled>true</enabled>
+           </snapshots>
+		</repository>
+        <repository>
+            <id>alfresco-maven-repo</id>
+            <url>https://maven.alfresco.com/nexus/content/groups/enterprise-snapshots</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>maven-central</id>
+			<url>http://repo.maven.apache.org/maven2/</url>
+		</pluginRepository>
+		<pluginRepository>
+			<id>alfresco-public</id>
+			<url>https://maven.alfresco.com/nexus/content/groups/public</url>
+		</pluginRepository>
+		<pluginRepository>
+			<id>alfresco-public-snapshots</id>
+			<url>https://maven.alfresco.com/nexus/content/groups/public-snapshots</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
+    
+	<!-- Alfresco dependencies -->
+	<dependencies>
+		<dependency>
+			<groupId>org.alfresco</groupId>
+			<artifactId>share</artifactId>
+			<version>${alfresco.version}</version>
+			<type>war</type>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<finalName>${webapp.name}</finalName>
+
+		<resources>
+			<!-- By default also no content is restored -->
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>log4j.properties</include>
+				</includes>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+
+        <plugins>
+			<plugin>
+		        <groupId>org.apache.maven.plugins</groupId>
+		        <artifactId>maven-war-plugin</artifactId>
+		        <version>2.3</version>
+        		<configuration>
+					<archiveClasses>false</archiveClasses>
+					<webappDirectory>target/${webapp.name}</webappDirectory>
+					<warSourceExcludes>tools/**</warSourceExcludes>
+					<webResources>
+					</webResources>
+				</configuration>
+			</plugin>
+			<!-- plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.6</version>
+				<executions>
+					<execution>
+						<id>copy-config</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${basedir}/target/config</outputDirectory>
+							<resources>          
+								<resource>
+								<directory>src/main/config</directory>
+								<filtering>true</filtering>
+								</resource>
+							</resources>              
+						</configuration>            
+					</execution>
+				</executions>
+			</plugin -->
+    		<plugin>
+				<groupId>org.codehaus.cargo</groupId>
+				<artifactId>cargo-maven2-plugin</artifactId>
+				<version>1.3.0</version>
+				<configuration>
+					<container>
+						<containerId>tomcat7x</containerId>
+						<zipUrlInstaller>
+							<url>http://mirrors.enquira.co.uk/apache/tomcat/tomcat-7/v7.0.32/bin/apache-tomcat-7.0.32.zip</url>
+						</zipUrlInstaller>
+					</container>
+					<configuration>
+						<properties>
+							<cargo.rmi.port>8206</cargo.rmi.port>
+							<cargo.servlet.port>8081</cargo.servlet.port>
+							<cargo.tomcat.ajp.port>8010</cargo.tomcat.ajp.port>
+						</properties>
+					</configuration>
+				</configuration>
+			</plugin>			
+		</plugins>
+	</build>
+</project>

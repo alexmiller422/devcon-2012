@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE beans PUBLIC '-//SPRING//DTD BEAN//EN' 'http://www.springframework.org/dtd/spring-beans.dtd'>
+
+<beans>
+    <!--  Initialise the DevCon content model. -->
+    <bean id="devcon_dictionaryBootstrap" parent="dictionaryModelBootstrap" depends-on="dictionaryBootstrap">
+        <property name="models">
+            <list>
+                <value>alfresco/extension/devconModel.xml</value>
+            </list>
+        </property>
+        <property name="labels">
+           <list>
+              <!-- i18n strings for Model-->
+              <value>alfresco/extension/devcon-model</value>
+           </list>
+        </property>
+    </bean>
+</beans>

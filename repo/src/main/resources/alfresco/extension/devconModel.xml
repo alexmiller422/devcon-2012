@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<model name="devcon:devconModel" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+
+   <description>DevCon Content Domain Model</description>
+   <author>Alfresco</author>
+   <published>2012-10-05</published>
+   <version>1.0</version>
+
+   <imports>
+      <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+      <import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+   </imports>
+   
+   <namespaces>
+      <namespace uri="http://www.alfresco.org/model/devcon/1.0" prefix="devcon"/>
+   </namespaces>
+
+   <constraints>
+      <constraint name="devcon:allowedAssetStatuses" type="LIST">
+         <parameter name="allowedValues">
+            <list>
+               <value>Available</value>
+               <value>Unavailable</value>
+            </list>
+         </parameter>
+      </constraint>
+
+      <constraint name="devcon:allowedPurchaseOrderStatuses" type="LIST">
+         <parameter name="allowedValues">
+            <list>
+               <value>New</value>
+               <value>Fulfilled</value>
+               <value>Error</value>
+            </list>
+         </parameter>
+      </constraint>
+   </constraints>
+   
+   <aspects>
+      <aspect name="devcon:asset">
+         <title>Asset</title>
+         <properties>
+            <property name="devcon:assetStatus">
+               <title>Asset Status</title>
+               <type>d:text</type>
+               <mandatory>true</mandatory>
+               <default>Available</default>
+               <constraints>
+                   <constraint ref="devcon:allowedAssetStatuses" />
+               </constraints>
+            </property>
+         </properties>
+      </aspect>
+
+      <aspect name="devcon:purchaseOrder">
+         <title>Purchase Order</title>
+         <properties>
+            <property name="devcon:purchaseOrderId">
+                <title>Purchase Order ID</title>
+                <type>d:text</type>
+                <mandatory>true</mandatory>
+            </property>
+            <property name="devcon:purchaseOrderStatus">
+               <title>Purchase Order Status</title>
+               <type>d:text</type>
+               <mandatory>true</mandatory>
+               <default>New</default>
+               <constraints>
+                   <constraint ref="devcon:allowedPurchaseOrderStatuses" />
+               </constraints>
+            </property>
+         </properties>
+         <associations>
+         	<association name="devcon:purchaseOrderItems">
+         		<title>Purchase Order Items</title>
+         		<source>
+         			<mandatory>false</mandatory>
+         			<many>true</many>
+         		</source>
+         		<target>
+         			<class>devcon:asset</class>
+         			<mandatory>false</mandatory>
+         			<many>true</many>
+         		</target>
+         	</association>
+         </associations>
+      </aspect>
+   </aspects>
+</model>
