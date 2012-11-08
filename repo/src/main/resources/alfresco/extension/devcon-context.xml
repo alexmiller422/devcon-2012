@@ -16,4 +16,26 @@
            </list>
         </property>
     </bean>
+    
+   <!-- Add JavaScript behaviour -->
+   <bean id="onAddAssetAspect" class="org.alfresco.repo.policy.registration.ClassPolicyRegistration" parent="policyRegistration" >
+      <property name="policyName">
+         <value>{http://www.alfresco.org}onAddAspect</value>
+      </property>
+      <property name="className">
+         <value>{http://www.alfresco.org/model/devcon/1.0}asset</value>
+      </property>
+      <property name="behaviour">
+         <bean class="org.alfresco.repo.jscript.ScriptBehaviour" parent="scriptBehaviour">
+            <property name="location">
+               <bean class="org.alfresco.repo.jscript.ClasspathScriptLocation">
+                  <constructor-arg>
+                     <value>alfresco/extension/scripts/onAddAssetAspect.js</value>
+                  </constructor-arg>
+               </bean>
+            </property>
+         </bean>
+      </property>
+   </bean>
+    
 </beans>
