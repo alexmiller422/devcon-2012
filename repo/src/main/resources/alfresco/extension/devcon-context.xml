@@ -17,25 +17,12 @@
         </property>
     </bean>
     
-   <!-- Add JavaScript behaviour -->
-   <bean id="onAddAssetAspect" class="org.alfresco.repo.policy.registration.ClassPolicyRegistration" parent="policyRegistration" >
-      <property name="policyName">
-         <value>{http://www.alfresco.org}onAddAspect</value>
-      </property>
-      <property name="className">
-         <value>{http://www.alfresco.org/model/devcon/1.0}asset</value>
-      </property>
-      <property name="behaviour">
-         <bean class="org.alfresco.repo.jscript.ScriptBehaviour" parent="scriptBehaviour">
-            <property name="location">
-               <bean class="org.alfresco.repo.jscript.ClasspathScriptLocation">
-                  <constructor-arg>
-                     <value>alfresco/extension/scripts/onAddAssetAspect.js</value>
-                  </constructor-arg>
-               </bean>
-            </property>
-         </bean>
-      </property>
-   </bean>
-    
+	<!-- Add java behaviours -->
+	<bean id="assetBehaviours" class="org.alfresco.devcon2012.behaviours.AssetBehaviours" init-method="init">
+		<property name="actionService" ref="ActionService"/>
+		<property name="nodeService" ref="NodeService"/>
+		<property name="policyComponent" ref="policyComponent"/>
+		<property name="serviceRegistry" ref="ServiceRegistry"/>
+		<property name="siteService" ref="SiteService"/>
+	</bean>    
 </beans>
