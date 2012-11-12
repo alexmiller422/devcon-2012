@@ -14,4 +14,5 @@ public interface DevconModel {
 
     final static QName ASPECT_ASSET = QName.createQName(DEVCON_MODEL_1_0_URI, "asset");
 
+    final static QName ASSOC_PURCHASE_ORDER_ITEMS = QName.createQName(DEVCON_MODEL_1_0_URI, "purchaseOrderItems");
 }

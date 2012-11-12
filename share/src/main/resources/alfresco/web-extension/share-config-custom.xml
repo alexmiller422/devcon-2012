@@ -1,48 +1,74 @@
 <alfresco-config>
 
-   <!-- Global config section -->
-   <config replace="true">
-      <flags>
-         <!--
-            Developer debugging setting to turn on DEBUG mode for client scripts in the browser
-         -->
-         <client-debug>true</client-debug>
+	<!-- Global config section -->
+	<config replace="true">
+		<flags>
+		    <!--
+		        Developer debugging setting to turn on DEBUG mode for client scripts in the browser
+		    -->
+		    <client-debug>true</client-debug>
+		
+		    <!--
+		        LOGGING can always be toggled at runtime when in DEBUG mode (Ctrl, Ctrl, Shift, Shift).
+		        This flag automatically activates logging on page load.
+		    -->
+		    <client-debug-autologging>false</client-debug-autologging>
+		</flags>
+	</config>
 
-         <!--
-            LOGGING can always be toggled at runtime when in DEBUG mode (Ctrl, Ctrl, Shift, Shift).
-            This flag automatically activates logging on page load.
-         -->
-         <client-debug-autologging>false</client-debug-autologging>
-      </flags>
-   </config>
-   
 
-   <!-- Document Library config section -->
-   <config evaluator="string-compare" condition="DocumentLibrary">
-
-      <!--
-         Used by the "Manage Aspects" action
-
-         For custom aspects, remember to also add the relevant i18n string(s)
-            cm_myaspect=My Aspect
-      -->
-      <aspects>
-         <!-- Aspects that a user can see -->
-         <visible>
-            <aspect name="devcon:asset" />
-            <aspect name="devcon:purchaseOrder" />
-         </visible>
-
-         <!-- Aspects that a user can add. Same as "visible" if left empty -->
-         <addable>
-         </addable>
-
-         <!-- Aspects that a user can remove. Same as "visible" if left empty -->
-         <removeable>
-         </removeable>
-      </aspects>
-
-   </config>
+	<!-- Document Library config section -->
+	<config evaluator="string-compare" condition="DocumentLibrary">
+		
+		<!--
+		Used by the "Manage Aspects" action
+		
+		For custom aspects, remember to also add the relevant i18n string(s)
+		   cm_myaspect=My Aspect
+		-->
+		<aspects>
+			<!-- Aspects that a user can see -->
+			<visible>
+				<aspect name="devcon:asset" />
+				<aspect name="devcon:purchaseOrder" />
+			</visible>
+			
+			<!-- Aspects that a user can add. Same as "visible" if left empty -->
+			<addable>
+			</addable>
+			
+			<!-- Aspects that a user can remove. Same as "visible" if left empty -->
+			<removeable>
+			</removeable>
+		</aspects>
+	</config>
+	
+	<config evaluator="string-compare" condition="DocLibActions">
+		<actions>
+			<action id="add-item" type="javascript" label="action.add_item">
+				<param name="function">onActionFormDialog</param>
+	            <param name="itemKind">action</param>
+	            <param name="itemId">add-item</param>
+	            <param name="mode">create</param>
+	            <param name="destination">{node.nodeRef}</param>
+                <permissions>
+                    <permission allow="true">Write</permission>
+                </permissions>
+                <param name="successMessage">message.add_item.success</param>
+                <param name="failureMessage">message.add_item.failure</param>
+                <evaluator>evaluator.isPurchaseOrder</evaluator>
+ 			</action>
+		</actions>
+		
+		<actionGroups>
+			<actionGroup id="document-browse">
+				<action index="0" id="add-item"/>
+			</actionGroup>
+			<actionGroup id="document-details">
+				<action index="0" id="add-item"/>
+			</actionGroup>
+		</actionGroups> 
+	</config>
 
 	<config evaluator="node-type" condition="cm:content">
 	   <forms>
@@ -59,6 +85,25 @@
 	         </field-visibility>
 	      </form>
 	   </forms>
+	</config>
+
+	<!-- Fulfill Purchase Order Action -->
+	<config evaluator="string-compare" condition="add-item">
+		<forms>
+			<form>
+				<field-visibility>
+		            <show id="item"/>
+				</field-visibility>
+				<appearance>
+					<field id="item" label-id="add-item.field.item">
+	                    <control template="/org/alfresco/components/form/controls/association.ftl">
+		            		<control-param name="forceEditable">true</control-param>
+		            		<control-param name="startLocation">{doclib}</control-param>
+	                 	</control>
+	 				</field>
+				</appearance>
+			</form>
+		</forms>
 	</config>
 
 </alfresco-config>

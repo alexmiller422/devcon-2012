@@ -24,5 +24,10 @@
 		<property name="policyComponent" ref="policyComponent"/>
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="siteService" ref="SiteService"/>
+	</bean>
+	
+	<!-- Add java actions -->
+	<bean id="add-item" class="org.alfresco.devcon2012.actions.AddItemActionExecuter" parent="action-executer">
+		<property name="nodeService" ref="NodeService"/>
 	</bean>    
 </beans>
